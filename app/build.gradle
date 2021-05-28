@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "example.jllarraz.com.passportreader"
+        applicationId "app.lagina.macellan.debug"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
@@ -48,7 +48,10 @@ dependencies {
     // ML Kit dependencies
     implementation 'com.google.firebase:firebase-core:17.3.0'
     implementation 'com.google.firebase:firebase-ml-common:22.1.0'
-    implementation 'com.google.firebase:firebase-ml-vision:24.0.2'
+    // implementation 'com.google.firebase:firebase-ml-vision:24.0.2'
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.3'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:16.1.3'
+
 
     //NFC Passport
     implementation 'org.jmrtd:jmrtd:0.7.18'
