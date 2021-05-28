@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="16dp"
     android:clipChildren="false"
-    android:padding="@dimen/margin_medium"
     android:scrollbars="none">
 
     <LinearLayout
@@ -17,7 +18,6 @@
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
             android:text="@string/selection_title" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -92,22 +92,68 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/read_nfc" />
-
-            <Button
-                android:id="@+id/buttonDeleteCSCA"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/delete_csca" />
         </LinearLayout>
 
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/button_id_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Kimlik" />
+
+            <RadioButton
+                android:id="@+id/button_id_passport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Pasaport" />
+
+        </RadioGroup>
 
         <LinearLayout
-            android:id="@+id/layoutAutomatic"
+            android:id="@+id/layoutIdCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/id_card_details" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:src="@drawable/tr_id_card" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutIdPassport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:orientation="vertical"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/id_passport_details" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:src="@drawable/passport_id_sample" />
+        </LinearLayout>
 
     </LinearLayout>
 

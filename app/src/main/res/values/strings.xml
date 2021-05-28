@@ -19,7 +19,7 @@
     <string name="status_bar_success">OCR Detected - Time required: %2dms</string>
     <string name="status_bar_failure">OCR Read failure - Time required: %1d ms</string>
 
-    <string name="nfc_title">Cihazı kimliğinizin üzerine koyun ve hareket ettirmeyin</string>
+    <string name="nfc_title">Cihazı kart/pasaport üzerine koyun ve hareket ettirmeyin</string>
 
     <string name="label_document_number">Document Number</string>
     <string name="label_document_expiry">Expiration Date</string>
@@ -36,13 +36,19 @@
     <string name="doc_expiry">Expiry Date: %1s</string>
 
     <string name="selection_title">Veri Girişi</string>
-    <string name="selection_description">Kimlik kartınızın arkasındaki verileri aşağıdaki alanlara yazınız.</string>
+    <string name="selection_description">Kartınızdaki verileri aşağıdaki alanlara yazınız.</string>
     <string name="selection_manual">Manual</string>
     <string name="selection_automatic">Automatic</string>
 
-    <string name="prompt_document_number">"Kart Numarası (İlk satırdaki "TUR" kısmından sonraki 9 hane, örn: E11D88144)"</string>
-    <string name="prompt_document_date_of_birth">"Doğum tarihi(yymmdd) - (İkinci satırdaki ilk 6 rakam. örn: 840501)"</string>
-    <string name="prompt_document_expiration">Son Kullanım tarihi (yymmdd) - (İkinci satırda "TUR" kısmından önceki 7 rakam örn: 2806066)" </string>
+    <string name="prompt_document_number">"Kart Numarası"</string>
+    <string name="prompt_document_date_of_birth">"Doğum tarihi(yymmdd)"</string>
+    <string name="prompt_document_expiration">Son Kullanım tarihi (yymmdd)" </string>
+    <string name="id_card_details">Kart Numarası (İlk satırdaki "TUR" kısmından sonraki 10 hane, örn: A12Z345670)
+        \n"Doğum tarihi (İkinci satırdaki ilk 6 rakam. örn: 930529)"
+        \nSon Kullanım tarihi (İkinci satırda "TUR" kısmından önceki 6 rakam örn: 240727)" </string>
+    <string name="id_passport_details">Pasaport Numarası (İkinci satırdaki 9 haneli yazı, örn: XN5004216)
+        \n"Doğum tarihi (Orta kısımdaki 6 rakam. örn: 880504)"
+        \nSon Kullanım tarihi (Sağdaki 6 rakam örn: 230915)" </string>
 
     <string name="read_nfc">READ NFC</string>
     <string name="download_csca">Download Spanish CSCA Master List</string>

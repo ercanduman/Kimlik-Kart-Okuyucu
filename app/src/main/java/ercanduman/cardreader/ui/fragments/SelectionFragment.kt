@@ -17,9 +17,7 @@ import ercanduman.cardreader.R
 import ercanduman.cardreader.ui.validators.DateRule
 import ercanduman.cardreader.ui.validators.DocumentNumberRule
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_selection.*
 import net.sf.scuba.data.Gender
 import org.jmrtd.lds.icao.MRZInfo
@@ -28,7 +26,6 @@ import java.security.Security
 class SelectionFragment : Fragment(R.layout.fragment_selection), Validator.ValidationListener {
 
     private var linearLayoutManual: LinearLayout? = null
-    private var linearLayoutAutomatic: LinearLayout? = null
     private var appCompatEditTextDocumentNumber: AppCompatEditText? = null
     private var appCompatEditTextDocumentExpiration: AppCompatEditText? = null
     private var appCompatEditTextDateOfBirth: AppCompatEditText? = null
@@ -41,7 +38,7 @@ class SelectionFragment : Fragment(R.layout.fragment_selection), Validator.Valid
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         linearLayoutManual = view.findViewById(R.id.layoutManual)
-        linearLayoutAutomatic = view.findViewById(R.id.layoutAutomatic)
+
         appCompatEditTextDocumentNumber = view.findViewById(R.id.documentNumber)
         appCompatEditTextDocumentExpiration = view.findViewById(R.id.documentExpiration)
         appCompatEditTextDateOfBirth = view.findViewById(R.id.documentDateOfBirth)
@@ -56,20 +53,19 @@ class SelectionFragment : Fragment(R.layout.fragment_selection), Validator.Valid
         mValidator!!.put(appCompatEditTextDocumentExpiration!!, DateRule())
         mValidator!!.put(appCompatEditTextDateOfBirth!!, DateRule())
 
-        buttonDeleteCSCA?.setOnClickListener {
-            val subscribe = cleanCSCAFolder()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { _ ->
-                        Toast.makeText(requireContext(), "CSCA Folder deleted", Toast.LENGTH_SHORT).show()
-                    }
-            disposable.add(subscribe)
+        button_id_card.setOnClickListener {
+            layoutIdCard.visibility = View.VISIBLE
+            layoutIdPassport.visibility = View.GONE
+        }
+
+        button_id_passport.setOnClickListener {
+            layoutIdCard.visibility = View.GONE
+            layoutIdPassport.visibility = View.VISIBLE
         }
     }
 
     private fun validateFields() {
         linearLayoutManual!!.visibility = View.VISIBLE
-        linearLayoutAutomatic!!.visibility = View.GONE
         try {
             mValidator!!.removeRules(appCompatEditTextDocumentNumber!!)
             mValidator!!.removeRules(appCompatEditTextDocumentExpiration!!)
@@ -110,11 +106,12 @@ class SelectionFragment : Fragment(R.layout.fragment_selection), Validator.Valid
 
     override fun onValidationSucceeded() {
 
-        val documentNumber = appCompatEditTextDocumentNumber!!.text!!.toString()
+        var documentNumber = appCompatEditTextDocumentNumber!!.text!!.toString()
         val dateOfBirth = appCompatEditTextDateOfBirth!!.text!!.toString()
         var documentExpiration = appCompatEditTextDocumentExpiration!!.text!!.toString()
 
-        documentExpiration = documentExpiration.dropLast(1)
+        if (documentExpiration.length > 6) documentExpiration = documentExpiration.dropLast(1)
+        if (documentNumber.length > 9) documentNumber = documentNumber.dropLast(1)
         val mrzInfo = MRZInfo("P",
                 "ESP",
                 "DUMMY",
