@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 30
     defaultConfig {
-        applicationId "app.lagina.macellan.debug"
+        applicationId "ercanduman.cardreader"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
