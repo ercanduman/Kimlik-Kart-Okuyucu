@@ -23,7 +23,7 @@ import java.security.Security
 class NFCDocumentTag {
 
     fun handleTag(context: Context, tag: Tag, mrzInfo: MRZInfo, mrtdTrustStore: MRTDTrustStore, passportCallback: PassportCallback): Disposable {
-        return Single.fromCallable({
+        return Single.fromCallable {
             var passport: Passport? = null
             var cardServiceException: Exception? = null
 
@@ -191,31 +191,32 @@ class NFCDocumentTag {
                     ex.printStackTrace()
                 }
             }
-
             PassportDTO(passport, cardServiceException)
-        })
-                .doOnSubscribe {
-                    passportCallback.onPassportReadStart()
-                }
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({ passportDTO ->
+        }.doOnSubscribe { passportCallback.onPassportReadStart() }
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { passportDTO ->
                     if (passportDTO.cardServiceException != null) {
-                        val cardServiceException = passportDTO.cardServiceException
-                        if (cardServiceException is AccessDeniedException) {
-                            passportCallback.onAccessDeniedException(cardServiceException)
-                        } else if (cardServiceException is BACDeniedException) {
-                            passportCallback.onBACDeniedException(cardServiceException)
-                        } else if (cardServiceException is PACEException) {
-                            passportCallback.onPACEException(cardServiceException)
-                        } else if (cardServiceException is CardServiceException) {
-                            passportCallback.onCardException(cardServiceException)
-                        } else {
-                            passportCallback.onGeneralException(cardServiceException)
+                        when (val cardServiceException = passportDTO.cardServiceException) {
+                            is AccessDeniedException -> {
+                                passportCallback.onAccessDeniedException(cardServiceException)
+                            }
+                            is BACDeniedException -> {
+                                passportCallback.onBACDeniedException(cardServiceException)
+                            }
+                            is PACEException -> {
+                                passportCallback.onPACEException(cardServiceException)
+                            }
+                            is CardServiceException -> {
+                                passportCallback.onCardException(cardServiceException)
+                            }
+                            else -> {
+                                passportCallback.onGeneralException(cardServiceException)
+                            }
                         }
                     } else {
                         passportCallback.onPassportRead(passportDTO.passport)
                     }
                     passportCallback.onPassportReadFinish()
-                })
+                }
     }
 
     data class PassportDTO(val passport: Passport? = null, val cardServiceException: Exception? = null)

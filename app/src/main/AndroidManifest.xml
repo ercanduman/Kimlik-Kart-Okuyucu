@@ -17,7 +17,6 @@
         android:required="true" />
 
     <application
-        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -28,9 +27,7 @@
         <activity
             android:name=".ui.activities.NfcActivity"
             android:keepScreenOn="true"
-            android:screenOrientation="nosensor">
-
-        </activity>
+            android:screenOrientation="nosensor" />
 
         <activity
             android:name=".ui.activities.SelectionActivity"
@@ -39,14 +36,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.nfc.action.TECH_DISCOVERED"
-                android:resource="@xml/nfc_tech_filter" />
         </activity>
     </application>
 

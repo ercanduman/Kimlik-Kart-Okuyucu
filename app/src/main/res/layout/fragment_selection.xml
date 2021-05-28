@@ -20,26 +20,6 @@
             android:layout_marginTop="22dp"
             android:text="@string/selection_title" />
 
-        <RadioGroup
-            android:id="@+id/radioButtonDataEntry"
-            style="@style/ToogleGroup"
-            android:checkedButton="@+id/radioButtonManual"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/radioButtonManual"
-                style="@style/ToogleButton.Left"
-                android:layout_marginLeft="1dp"
-                android:text="@string/selection_manual" />
-
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/radioButtonOcr"
-                style="@style/ToogleButton.Right"
-                android:layout_marginRight="1dp"
-                android:text="@string/selection_automatic" />
-        </RadioGroup>
-
-
         <LinearLayout
             android:id="@+id/layoutManual"
             android:layout_width="match_parent"
@@ -104,12 +84,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/read_nfc" />
-
-            <Button
-                android:id="@+id/buttonDownloadCSCA"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/download_csca" />
 
             <Button
                 android:id="@+id/buttonDeleteCSCA"

@@ -29,6 +29,6 @@ class DocumentNumberRule : QuickRule<AppCompatEditText>() {
 
     companion object {
 
-        private val REGEX = "[A-Z0-9<]{9}$"
+        private const val REGEX = "[A-Z0-9<]{9}$"
     }
 }

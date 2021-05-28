@@ -56,8 +56,6 @@ class NfcFragment : androidx.fragment.app.Fragment() {
         val arguments = arguments
         if (arguments!!.containsKey(IntentData.KEY_MRZ_INFO)) {
             mrzInfo = arguments.getSerializable(IntentData.KEY_MRZ_INFO) as MRZInfo
-        } else {
-            //error
         }
 
         textViewPassportNumber = view.findViewById(R.id.value_passport_number)
@@ -179,18 +177,18 @@ class NfcFragment : androidx.fragment.app.Fragment() {
         super.onDestroyView()
     }
 
-    protected fun onNFCSReadStart() {
+    private fun onNFCSReadStart() {
         Log.d(TAG, "onNFCSReadStart")
         mHandler.post { progressBar!!.visibility = View.VISIBLE }
 
     }
 
-    protected fun onNFCReadFinish() {
+    private fun onNFCReadFinish() {
         Log.d(TAG, "onNFCReadFinish")
         mHandler.post { progressBar!!.visibility = View.GONE }
     }
 
-    protected fun onCardException(cardException: Exception?) {
+    private fun onCardException(cardException: Exception?) {
         mHandler.post {
             if (nfcFragmentListener != null) {
                 nfcFragmentListener!!.onCardException(cardException)
@@ -198,7 +196,7 @@ class NfcFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    protected fun onPassportRead(passport: Passport?) {
+    private fun onPassportRead(passport: Passport?) {
         mHandler.post {
             if (nfcFragmentListener != null) {
                 nfcFragmentListener!!.onPassportRead(passport)
@@ -212,7 +210,6 @@ class NfcFragment : androidx.fragment.app.Fragment() {
         fun onPassportRead(passport: Passport?)
         fun onCardException(cardException: Exception?)
     }
-
 
     companion object {
         private val TAG = NfcFragment::class.java.simpleName

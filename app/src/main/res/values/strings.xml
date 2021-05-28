@@ -36,7 +36,7 @@
     <string name="doc_dob">Date of Birth: %1s</string>
     <string name="doc_expiry">Expiry Date: %1s</string>
 
-    <string name="selection_title">Data Entry</string>
+    <string name="selection_title">Veri Girişi</string>
     <string name="selection_manual">Manual</string>
     <string name="selection_automatic">Automatic</string>
 

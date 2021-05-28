@@ -3,31 +3,28 @@ package ercanduman.cardreader.ui.fragments
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import org.jmrtd.FeatureStatus
-import org.jmrtd.VerificationStatus
-
-import java.security.MessageDigest
-import java.text.SimpleDateFormat
-
-import javax.security.auth.x500.X500Principal
-
+import androidx.core.content.ContextCompat
 import ercanduman.cardreader.R
 import ercanduman.cardreader.common.IntentData
 import ercanduman.cardreader.data.Passport
 import ercanduman.cardreader.utils.StringUtils
 import kotlinx.android.synthetic.main.fragment_passport_details.*
+import org.jmrtd.FeatureStatus
+import org.jmrtd.VerificationStatus
+import java.security.MessageDigest
+import java.text.SimpleDateFormat
 import java.util.*
+import javax.security.auth.x500.X500Principal
 
 class PassportDetailsFragment : androidx.fragment.app.Fragment() {
 
     private var passportDetailsFragmentListener: PassportDetailsFragmentListener? = null
 
-    internal var simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+    private var simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
 
     private var passport: Passport? = null
 
@@ -48,11 +45,8 @@ class PassportDetailsFragment : androidx.fragment.app.Fragment() {
 
         val arguments = arguments
         if (arguments!!.containsKey(IntentData.KEY_PASSPORT)) {
-            passport = arguments.getParcelable<Passport>(IntentData.KEY_PASSPORT)
-        } else {
-            //error
+            passport = arguments.getParcelable(IntentData.KEY_PASSPORT)
         }
-
 
         iconPhoto!!.setOnClickListener {
             var bitmap = passport!!.face
@@ -405,8 +399,6 @@ class PassportDetailsFragment : androidx.fragment.app.Fragment() {
     }
 
     companion object {
-
-
         fun newInstance(passport: Passport): PassportDetailsFragment {
             val myFragment = PassportDetailsFragment()
             val args = Bundle()

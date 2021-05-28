@@ -28,7 +28,6 @@ class DateRule : QuickRule<AppCompatEditText>() {
     }
 
     companion object {
-
-        private val REGEX = "[0-9]{6}$"
+        private const val REGEX = "[0-9]{6}$"
     }
 }

@@ -43,7 +43,7 @@ class AdditionalPersonDetails() : Parcelable {
         parcel.writeString(fullDateOfBirth)
         parcel.writeString(nameOfHolder)
         parcel.writeStringList(otherNames)
-        parcel.writeStringList(otherValidTDNumbers ?: emptyList())
+        parcel.writeStringList(otherValidTDNumbers)
         parcel.writeStringList(permanentAddress)
         parcel.writeString(personalNumber)
         parcel.writeString(personalSummary)

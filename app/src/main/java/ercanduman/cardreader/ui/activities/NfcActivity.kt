@@ -1,5 +1,6 @@
 package ercanduman.cardreader.ui.activities
 
+
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Bitmap
@@ -7,16 +8,13 @@ import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
-
-
-import org.jmrtd.lds.icao.MRZInfo
-
 import ercanduman.cardreader.R
 import ercanduman.cardreader.common.IntentData
 import ercanduman.cardreader.data.Passport
 import ercanduman.cardreader.ui.fragments.NfcFragment
 import ercanduman.cardreader.ui.fragments.PassportDetailsFragment
 import ercanduman.cardreader.ui.fragments.PassportPhotoFragment
+import org.jmrtd.lds.icao.MRZInfo
 
 class NfcActivity : androidx.fragment.app.FragmentActivity(), NfcFragment.NfcFragmentListener, PassportDetailsFragment.PassportDetailsFragmentListener, PassportPhotoFragment.PassportPhotoFragmentListener {
 
@@ -69,7 +67,7 @@ class NfcActivity : androidx.fragment.app.FragmentActivity(), NfcFragment.NfcFra
         if (NfcAdapter.ACTION_TAG_DISCOVERED == intent.action || NfcAdapter.ACTION_TECH_DISCOVERED == intent.action) {
             // drop NFC events
             handleIntent(intent)
-        }else{
+        } else {
             super.onNewIntent(intent)
         }
     }
@@ -140,10 +138,6 @@ class NfcActivity : androidx.fragment.app.FragmentActivity(), NfcFragment.NfcFra
     }
 
     companion object {
-
-        private val TAG = NfcActivity::class.java.simpleName
-
-
         private val TAG_NFC = "TAG_NFC"
         private val TAG_PASSPORT_DETAILS = "TAG_PASSPORT_DETAILS"
         private val TAG_PASSPORT_PICTURE = "TAG_PASSPORT_PICTURE"

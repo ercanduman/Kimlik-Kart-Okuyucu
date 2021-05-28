@@ -6,27 +6,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 
 import ercanduman.cardreader.R
 import ercanduman.cardreader.common.IntentData
 import kotlinx.android.synthetic.main.fragment_photo.*
 
-class PassportPhotoFragment : androidx.fragment.app.Fragment() {
+class PassportPhotoFragment : Fragment() {
 
     private var passportPhotoFragmentListener: PassportPhotoFragmentListener? = null
 
     private var bitmap: Bitmap? = null
 
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        val inflatedView = inflater.inflate(R.layout.fragment_photo, container, false)
-
-
-
-        return inflatedView
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_photo, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,7 +63,6 @@ class PassportPhotoFragment : androidx.fragment.app.Fragment() {
     interface PassportPhotoFragmentListener
 
     companion object {
-
         fun newInstance(bitmap: Bitmap): PassportPhotoFragment {
             val myFragment = PassportPhotoFragment()
             val args = Bundle()
