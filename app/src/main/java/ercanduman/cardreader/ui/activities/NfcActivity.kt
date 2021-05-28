@@ -3,21 +3,19 @@ package ercanduman.cardreader.ui.activities
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.graphics.Bitmap
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import ercanduman.cardreader.R
 import ercanduman.cardreader.common.IntentData
 import ercanduman.cardreader.data.Passport
 import ercanduman.cardreader.ui.fragments.NfcFragment
 import ercanduman.cardreader.ui.fragments.PassportDetailsFragment
-import ercanduman.cardreader.ui.fragments.PassportPhotoFragment
 import org.jmrtd.lds.icao.MRZInfo
 
-class NfcActivity : androidx.fragment.app.FragmentActivity(), NfcFragment.NfcFragmentListener, PassportDetailsFragment.PassportDetailsFragmentListener, PassportPhotoFragment.PassportPhotoFragmentListener {
-
+class NfcActivity : FragmentActivity(), NfcFragment.NfcFragmentListener {
     private var mrzInfo: MRZInfo? = null
 
     private var nfcAdapter: NfcAdapter? = null
@@ -53,16 +51,6 @@ class NfcActivity : androidx.fragment.app.FragmentActivity(), NfcFragment.NfcFra
         }
     }
 
-    public override fun onResume() {
-        super.onResume()
-
-    }
-
-    public override fun onPause() {
-        super.onPause()
-
-    }
-
     public override fun onNewIntent(intent: Intent) {
         if (NfcAdapter.ACTION_TAG_DISCOVERED == intent.action || NfcAdapter.ACTION_TECH_DISCOVERED == intent.action) {
             // drop NFC events
@@ -72,7 +60,7 @@ class NfcActivity : androidx.fragment.app.FragmentActivity(), NfcFragment.NfcFra
         }
     }
 
-    protected fun handleIntent(intent: Intent) {
+    private fun handleIntent(intent: Intent) {
         val fragmentByTag = supportFragmentManager.findFragmentByTag(TAG_NFC)
         if (fragmentByTag is NfcFragment) {
             fragmentByTag.handleNfcTag(intent)
@@ -87,8 +75,6 @@ class NfcActivity : androidx.fragment.app.FragmentActivity(), NfcFragment.NfcFra
     /////////////////////////////////////////////////////
 
     override fun onEnableNfc() {
-
-
         if (nfcAdapter != null) {
             if (!nfcAdapter!!.isEnabled)
                 showWirelessSettings()
@@ -107,6 +93,7 @@ class NfcActivity : androidx.fragment.app.FragmentActivity(), NfcFragment.NfcFra
     }
 
     override fun onCardException(cardException: Exception?) {
+        cardException?.printStackTrace()
         //Toast.makeText(this, cardException.toString(), Toast.LENGTH_SHORT).show();
         //onBackPressed();
     }
@@ -125,21 +112,8 @@ class NfcActivity : androidx.fragment.app.FragmentActivity(), NfcFragment.NfcFra
                 .commit()
     }
 
-    private fun showFragmentPhoto(bitmap: Bitmap) {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.container, PassportPhotoFragment.newInstance(bitmap))
-                .addToBackStack(TAG_PASSPORT_PICTURE)
-                .commit()
-    }
-
-
-    override fun onImageSelected(bitmap: Bitmap?) {
-        showFragmentPhoto(bitmap!!)
-    }
-
     companion object {
-        private val TAG_NFC = "TAG_NFC"
-        private val TAG_PASSPORT_DETAILS = "TAG_PASSPORT_DETAILS"
-        private val TAG_PASSPORT_PICTURE = "TAG_PASSPORT_PICTURE"
+        private const val TAG_NFC = "TAG_NFC"
+        private const val TAG_PASSPORT_DETAILS = "TAG_PASSPORT_DETAILS"
     }
 }

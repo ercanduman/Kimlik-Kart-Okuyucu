@@ -1,13 +1,10 @@
 package ercanduman.cardreader.ui.fragments
 
-import android.content.Context
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import ercanduman.cardreader.R
 import ercanduman.cardreader.common.IntentData
 import ercanduman.cardreader.data.Passport
@@ -20,25 +17,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.security.auth.x500.X500Principal
 
-class PassportDetailsFragment : androidx.fragment.app.Fragment() {
-
-    private var passportDetailsFragmentListener: PassportDetailsFragmentListener? = null
+class PassportDetailsFragment : Fragment(R.layout.fragment_passport_details) {
 
     private var simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-
     private var passport: Passport? = null
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        val inflatedView = inflater.inflate(R.layout.fragment_passport_details, container, false)
-
-
-
-
-        return inflatedView
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,16 +28,6 @@ class PassportDetailsFragment : androidx.fragment.app.Fragment() {
         val arguments = arguments
         if (arguments!!.containsKey(IntentData.KEY_PASSPORT)) {
             passport = arguments.getParcelable(IntentData.KEY_PASSPORT)
-        }
-
-        iconPhoto!!.setOnClickListener {
-            var bitmap = passport!!.face
-            if (bitmap == null) {
-                bitmap = passport!!.portrait
-            }
-            if (passportDetailsFragmentListener != null) {
-                passportDetailsFragmentListener!!.onImageSelected(bitmap)
-            }
         }
     }
 
@@ -222,63 +194,78 @@ class PassportDetailsFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun displayWarningTitle(verificationStatus: VerificationStatus?, featureStatus: FeatureStatus) {
-        var colorCard = android.R.color.holo_green_light
-        var message = ""
-        var title = ""
-        if (featureStatus.hasCA() == FeatureStatus.Verdict.PRESENT) {
-            if (verificationStatus!!.ca == VerificationStatus.Verdict.SUCCEEDED && verificationStatus.ht == VerificationStatus.Verdict.SUCCEEDED && verificationStatus.cs == VerificationStatus.Verdict.SUCCEEDED) {
-                //Everything is fine
-                colorCard = android.R.color.holo_green_light
-                title = getString(R.string.document_valid_passport)
-                message = getString(R.string.document_chip_content_success)
-            } else if (verificationStatus.ca == VerificationStatus.Verdict.FAILED) {
-                //Chip authentication failed
-                colorCard = android.R.color.holo_red_light
-                title = getString(R.string.document_invalid_passport)
-                message = getString(R.string.document_chip_failure)
-            } else if (verificationStatus.ht == VerificationStatus.Verdict.FAILED) {
-                //Document information
-                colorCard = android.R.color.holo_red_light
-                title = getString(R.string.document_invalid_passport)
-                message = getString(R.string.document_document_failure)
-            } else if (verificationStatus.cs == VerificationStatus.Verdict.FAILED) {
-                //CSCA information
-                colorCard = android.R.color.holo_red_light
-                title = getString(R.string.document_invalid_passport)
-                message = getString(R.string.document_csca_failure)
-            } else {
+        val colorCard: Int
+        val message: String
+        val title: String
+        when {
+            featureStatus.hasCA() == FeatureStatus.Verdict.PRESENT -> {
+                when {
+                    verificationStatus!!.ca == VerificationStatus.Verdict.SUCCEEDED && verificationStatus.ht == VerificationStatus.Verdict.SUCCEEDED && verificationStatus.cs == VerificationStatus.Verdict.SUCCEEDED -> {
+                        //Everything is fine
+                        colorCard = android.R.color.holo_green_light
+                        title = getString(R.string.document_valid_passport)
+                        message = getString(R.string.document_chip_content_success)
+                    }
+                    verificationStatus.ca == VerificationStatus.Verdict.FAILED -> {
+                        //Chip authentication failed
+                        colorCard = android.R.color.holo_red_light
+                        title = getString(R.string.document_invalid_passport)
+                        message = getString(R.string.document_chip_failure)
+                    }
+                    verificationStatus.ht == VerificationStatus.Verdict.FAILED -> {
+                        //Document information
+                        colorCard = android.R.color.holo_red_light
+                        title = getString(R.string.document_invalid_passport)
+                        message = getString(R.string.document_document_failure)
+                    }
+                    verificationStatus.cs == VerificationStatus.Verdict.FAILED -> {
+                        //CSCA information
+                        colorCard = android.R.color.holo_red_light
+                        title = getString(R.string.document_invalid_passport)
+                        message = getString(R.string.document_csca_failure)
+                    }
+                    else -> {
+                        //Unknown
+                        colorCard = android.R.color.darker_gray
+                        title = getString(R.string.document_unknown_passport_title)
+                        message = getString(R.string.document_unknown_passport_message)
+                    }
+                }
+            }
+            featureStatus.hasCA() == FeatureStatus.Verdict.NOT_PRESENT -> {
+                when {
+                    verificationStatus!!.ht == VerificationStatus.Verdict.SUCCEEDED -> {
+                        //Document information is fine
+                        colorCard = android.R.color.holo_green_light
+                        title = getString(R.string.document_valid_passport)
+                        message = getString(R.string.document_content_success)
+                    }
+                    verificationStatus.ht == VerificationStatus.Verdict.FAILED -> {
+                        //Document information
+                        colorCard = android.R.color.holo_red_light
+                        title = getString(R.string.document_invalid_passport)
+                        message = getString(R.string.document_document_failure)
+                    }
+                    verificationStatus.cs == VerificationStatus.Verdict.FAILED -> {
+                        //CSCA information
+                        colorCard = android.R.color.holo_red_light
+                        title = getString(R.string.document_invalid_passport)
+                        message = getString(R.string.document_csca_failure)
+                    }
+                    else -> {
+                        //Unknown
+                        colorCard = android.R.color.darker_gray
+                        title = getString(R.string.document_unknown_passport_title)
+                        message = getString(R.string.document_unknown_passport_message)
+                    }
+                }
+            }
+            else -> {
                 //Unknown
                 colorCard = android.R.color.darker_gray
                 title = getString(R.string.document_unknown_passport_title)
                 message = getString(R.string.document_unknown_passport_message)
             }
-        } else if (featureStatus.hasCA() == FeatureStatus.Verdict.NOT_PRESENT) {
-            if (verificationStatus!!.ht == VerificationStatus.Verdict.SUCCEEDED) {
-                //Document information is fine
-                colorCard = android.R.color.holo_green_light
-                title = getString(R.string.document_valid_passport)
-                message = getString(R.string.document_content_success)
-            } else if (verificationStatus.ht == VerificationStatus.Verdict.FAILED) {
-                //Document information
-                colorCard = android.R.color.holo_red_light
-                title = getString(R.string.document_invalid_passport)
-                message = getString(R.string.document_document_failure)
-            } else if (verificationStatus.cs == VerificationStatus.Verdict.FAILED) {
-                //CSCA information
-                colorCard = android.R.color.holo_red_light
-                title = getString(R.string.document_invalid_passport)
-                message = getString(R.string.document_csca_failure)
-            } else {
-                //Unknown
-                colorCard = android.R.color.darker_gray
-                title = getString(R.string.document_unknown_passport_title)
-                message = getString(R.string.document_unknown_passport_message)
-            }
-        } else {
-            //Unknown
-            colorCard = android.R.color.darker_gray
-            title = getString(R.string.document_unknown_passport_title)
-            message = getString(R.string.document_unknown_passport_message)
         }
         card_view_warning!!.setCardBackgroundColor(resources.getColor(colorCard))
         textWarningTitle!!.text = title
@@ -365,26 +352,6 @@ class PassportDetailsFragment : androidx.fragment.app.Fragment() {
         imageView!!.setImageResource(resourceIconId)
         imageView.setColorFilter(ContextCompat.getColor(activity!!, resourceColorId), android.graphics.PorterDuff.Mode.SRC_IN)
     }
-
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val activity = activity
-        if (activity is PassportDetailsFragment.PassportDetailsFragmentListener) {
-            passportDetailsFragmentListener = activity
-        }
-    }
-
-    override fun onDetach() {
-        passportDetailsFragmentListener = null
-        super.onDetach()
-
-    }
-
-    interface PassportDetailsFragmentListener {
-        fun onImageSelected(bitmap: Bitmap?)
-    }
-
 
     private fun arrayToString(array: List<String>): String {
         var temp = ""
