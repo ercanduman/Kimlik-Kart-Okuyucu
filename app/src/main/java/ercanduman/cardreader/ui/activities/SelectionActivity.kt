@@ -52,8 +52,8 @@ class SelectionActivity : AppCompatActivity(), SelectionFragment.SelectionFragme
     }
 
     companion object {
-        private val REQUEST_NFC = 11
+        private const val REQUEST_NFC = 11
 
-        private val TAG_SELECTION_FRAGMENT = "TAG_SELECTION_FRAGMENT"
+        private const val TAG_SELECTION_FRAGMENT = "TAG_SELECTION_FRAGMENT"
     }
 }

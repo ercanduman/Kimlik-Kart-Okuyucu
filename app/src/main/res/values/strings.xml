@@ -15,7 +15,6 @@
     <string name="warning_error_ocr_install">Error Installing &amp; Starting OCR</string>
     <string name="warning_ocr_install_progress">Installation OCR: %1d%%</string>
 
-
     <string name="status_bar_ocr">Document Number: %1s Date of Birth: %2s Expiration Date: %3s</string>
     <string name="status_bar_success">OCR Detected - Time required: %2dms</string>
     <string name="status_bar_failure">OCR Read failure - Time required: %1d ms</string>
@@ -37,12 +36,13 @@
     <string name="doc_expiry">Expiry Date: %1s</string>
 
     <string name="selection_title">Veri Girişi</string>
+    <string name="selection_description">Kimlik kartınızın arkasındaki verileri aşağıdaki alanlara yazınız.</string>
     <string name="selection_manual">Manual</string>
     <string name="selection_automatic">Automatic</string>
 
-    <string name="prompt_document_number">Document Number</string>
-    <string name="prompt_document_expiration">Document Expiration (yymmdd)</string>
-    <string name="prompt_document_date_of_birth">Date of Birth (yymmdd)</string>
+    <string name="prompt_document_number">"Kart Numarası (İlk satırdaki "TUR" kısmından sonraki 9 hane, örn: E11D88144)"</string>
+    <string name="prompt_document_date_of_birth">"Doğum tarihi(yymmdd) - (İkinci satırdaki ilk 6 rakam. örn: 840501)"</string>
+    <string name="prompt_document_expiration">Son Kullanım tarihi (yymmdd) - (İkinci satırda "TUR" kısmından önceki 7 rakam örn: 2806066)" </string>
 
     <string name="read_nfc">READ NFC</string>
     <string name="download_csca">Download Spanish CSCA Master List</string>
@@ -52,8 +52,8 @@
     <string name="error_validation_date">Date format is not valid</string>
     <string name="error_validation_document_number">Document number is not valid</string>
 
-    <string name="warning_no_nfc">There is no NFC available</string>
-    <string name="warning_enable_nfc">You need to enable NFC</string>
+    <string name="warning_no_nfc">NFC bulunamadı.</string>
+    <string name="warning_enable_nfc">NFC aktif edilmelidir.</string>
 
     <string name="label_additional_information">Additional person information</string>
     <string name="label_additional_information_custody">Custody</string>
@@ -118,5 +118,4 @@
 
     <string name="keystore_not_empty_title">Keystore</string>
     <string name="keystore_not_empty_message">Do you want to replace the current keystore?</string>
-
 </resources>

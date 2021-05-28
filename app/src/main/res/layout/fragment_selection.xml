@@ -14,11 +14,19 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/titleRadioGroup"
-            style="@style/InputLabel"
+            style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:text="@string/selection_title" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/description"
+            style="@style/InputLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="@string/selection_description" />
 
         <LinearLayout
             android:id="@+id/layoutManual"
@@ -74,7 +82,7 @@
                     android:hint="@string/prompt_document_expiration"
                     android:imeOptions="actionDone"
                     android:inputType="number"
-                    android:maxLength="6"
+                    android:maxLength="7"
                     android:maxLines="3" />
 
             </com.google.android.material.textfield.TextInputLayout>

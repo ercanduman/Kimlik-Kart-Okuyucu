@@ -112,8 +112,9 @@ class SelectionFragment : Fragment(R.layout.fragment_selection), Validator.Valid
 
         val documentNumber = appCompatEditTextDocumentNumber!!.text!!.toString()
         val dateOfBirth = appCompatEditTextDateOfBirth!!.text!!.toString()
-        val documentExpiration = appCompatEditTextDocumentExpiration!!.text!!.toString()
+        var documentExpiration = appCompatEditTextDocumentExpiration!!.text!!.toString()
 
+        documentExpiration = documentExpiration.dropLast(1)
         val mrzInfo = MRZInfo("P",
                 "ESP",
                 "DUMMY",
