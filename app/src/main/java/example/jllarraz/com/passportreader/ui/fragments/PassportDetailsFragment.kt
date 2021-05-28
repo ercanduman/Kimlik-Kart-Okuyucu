@@ -112,7 +112,7 @@ class PassportDetailsFragment : androidx.fragment.app.Fragment() {
             if (additionalPersonDetails.otherNames != null && additionalPersonDetails.otherNames!!.size > 0) {
                 value_other_names!!.text = arrayToString(additionalPersonDetails.otherNames!!)
             }
-            if (additionalPersonDetails.otherValidTDNumbers != null && additionalPersonDetails.otherValidTDNumbers!!.size > 0) {
+            if (additionalPersonDetails.otherValidTDNumbers != null && additionalPersonDetails.otherValidTDNumbers!!.isNotEmpty()) {
                 value_other_td_numbers!!.text = arrayToString(additionalPersonDetails.otherValidTDNumbers!!)
             }
             if (additionalPersonDetails.permanentAddress != null && additionalPersonDetails.permanentAddress!!.size > 0) {

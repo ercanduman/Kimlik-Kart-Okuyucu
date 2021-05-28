@@ -26,15 +26,6 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.activities.CameraActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="stateAlwaysHidden">
-
-        </activity>
-
-        <activity
             android:name=".ui.activities.NfcActivity"
             android:keepScreenOn="true"
             android:screenOrientation="nosensor">
@@ -57,10 +48,6 @@
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter" />
         </activity>
-
-        <meta-data
-            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="ocr" />
     </application>
 
 </manifest>

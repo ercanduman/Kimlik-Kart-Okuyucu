@@ -2,20 +2,16 @@ package org.jmrtd
 
 import android.os.Parcel
 import android.os.Parcelable
-
 import net.sf.scuba.util.Hex
-
 import org.jmrtd.protocol.EACCAResult
 import org.jmrtd.protocol.EACTAResult
-
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.Serializable
 import java.security.cert.Certificate
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.TreeMap
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * A data type for communicating document verification check information.
@@ -34,6 +30,7 @@ class VerificationStatus : Parcelable {
      */
     var aa: Verdict? = null
         private set
+
     /**
      * Gets the BAC verdict.
      *
@@ -41,6 +38,7 @@ class VerificationStatus : Parcelable {
      */
     var bac: Verdict? = null
         private set
+
     /**
      * Gets the SAC verdict.
      *
@@ -48,6 +46,7 @@ class VerificationStatus : Parcelable {
      */
     var sac: Verdict? = null
         private set
+
     /**
      * Gets the CS verdict.
      *
@@ -55,6 +54,7 @@ class VerificationStatus : Parcelable {
      */
     var cs: Verdict? = null
         private set
+
     /**
      * Gets the hash table verdict.
      *
@@ -62,6 +62,7 @@ class VerificationStatus : Parcelable {
      */
     var ht: Verdict? = null
         private set
+
     /**
      * Gets the DS verdict.
      *
@@ -69,6 +70,7 @@ class VerificationStatus : Parcelable {
      */
     var ds: Verdict? = null
         private set
+
     /**
      * Gets the EAC verdict.
      *
@@ -76,6 +78,7 @@ class VerificationStatus : Parcelable {
      */
     var eac: Verdict? = null
         private set
+
     /**
      * Gets the CA verdict.
      *
@@ -92,6 +95,7 @@ class VerificationStatus : Parcelable {
      */
     var aaReason: String? = null
         private set
+
     /**
      * Gets the BAC verdict string.
      *
@@ -99,6 +103,7 @@ class VerificationStatus : Parcelable {
      */
     var bacReason: String? = null
         private set
+
     /**
      * Gets the SAC reason.
      *
@@ -106,6 +111,7 @@ class VerificationStatus : Parcelable {
      */
     var sacReason: String? = null
         private set
+
     /**
      * Gets the country signature reason string.
      *
@@ -113,6 +119,7 @@ class VerificationStatus : Parcelable {
      */
     var csReason: String? = null
         private set
+
     /**
      * Gets the hash table reason string.
      *
@@ -120,6 +127,7 @@ class VerificationStatus : Parcelable {
      */
     var htReason: String? = null
         private set
+
     /**
      * Gets the document signature verdict reason string.
      *
@@ -127,6 +135,7 @@ class VerificationStatus : Parcelable {
      */
     var dsReason: String? = null
         private set
+
     /**
      * Gets the EAC reason string.
      *
@@ -134,6 +143,7 @@ class VerificationStatus : Parcelable {
      */
     var eacReason: String? = null
         private set
+
     /**
      * Gets the CA reason string.
      *
@@ -143,9 +153,10 @@ class VerificationStatus : Parcelable {
         private set
 
     /* By products of the verification process that may be useful for relying parties to display. */
-    private var triedBACEntries: List<BACKey>? = null /* As a result of BAC testing, this contains all tried BAC entries. */
+    private var triedBACEntries: List<BACKey> = ArrayList() /* As a result of BAC testing, this contains all tried BAC entries. */
     var hashResults: MutableMap<Int, HashMatchResult>? = null /* As a result of HT testing, this contains stored and computed hashes. */
-    private var certificateChain: List<Certificate>? = null /* As a result of CS testing, this contains certificate chain from DSC to CSCA. */
+    private var certificateChain: List<Certificate> = ArrayList() /* As a result of CS testing, this contains certificate chain from DSC to CSCA. */
+
     /**
      * Gets the EAC result.
      *
@@ -153,6 +164,7 @@ class VerificationStatus : Parcelable {
      */
     var eacResult: EACTAResult? = null
         private set
+
     /**
      * Gets the CA result.
      *
@@ -212,7 +224,7 @@ class VerificationStatus : Parcelable {
      * @param reason a reason string
      * @param triedBACEntries the list of BAC entries that were tried
      */
-    fun setBAC(v: Verdict, reason: String?, triedBACEntries: List<BACKey>?) {
+    fun setBAC(v: Verdict, reason: String?, triedBACEntries: List<BACKey>) {
         this.bac = v
         this.bacReason = reason
         this.triedBACEntries = triedBACEntries
@@ -245,7 +257,7 @@ class VerificationStatus : Parcelable {
      * @param reason the reason string
      * @param certificateChain the certificate chain between DS and CSCA
      */
-    fun setCS(v: Verdict, reason: String?, certificateChain: List<Certificate>?) {
+    fun setCS(v: Verdict, reason: String?, certificateChain: List<Certificate>) {
         this.cs = v
         this.csReason = reason
         this.certificateChain = certificateChain
@@ -319,8 +331,8 @@ class VerificationStatus : Parcelable {
      */
     fun setAll(verdict: Verdict, reason: String?) {
         setAA(verdict, reason)
-        setBAC(verdict, reason, null)
-        setCS(verdict, reason, null)
+        setBAC(verdict, reason, emptyList())
+        setCS(verdict, reason, emptyList())
         setDS(verdict, reason)
         setHT(verdict, reason, null)
         setEAC(verdict, reason, null)
@@ -328,14 +340,14 @@ class VerificationStatus : Parcelable {
 
 
     constructor(`in`: Parcel) {
-        this.aa =  if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!)  else null
-        this.bac =  if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
-        this.sac =  if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
-        this.cs =  if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
+        this.aa = if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
+        this.bac = if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
+        this.sac = if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
+        this.cs = if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
         this.ht = if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
-        this.ds =  if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
-        this.eac =  if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
-        this.ca =  if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
+        this.ds = if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
+        this.eac = if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
+        this.ca = if (`in`.readInt() == 1) Verdict.valueOf(`in`.readString()!!) else null
 
         this.aaReason = if (`in`.readInt() == 1) `in`.readString() else null
         this.bacReason = if (`in`.readInt() == 1) `in`.readString() else null
@@ -380,36 +392,36 @@ class VerificationStatus : Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeInt(if(this.aa!=null) 1 else 0)
-        if(aa!=null) {
+        dest.writeInt(if (this.aa != null) 1 else 0)
+        if (aa != null) {
             dest.writeString(aa?.name)
         }
-        dest.writeInt(if(this.bac!=null) 1 else 0)
-        if(bac!=null) {
+        dest.writeInt(if (this.bac != null) 1 else 0)
+        if (bac != null) {
             dest.writeString(bac?.name)
         }
-        dest.writeInt(if(this.sac!=null) 1 else 0)
-        if(sac!=null) {
+        dest.writeInt(if (this.sac != null) 1 else 0)
+        if (sac != null) {
             dest.writeString(sac?.name)
         }
-        dest.writeInt(if(this.cs!=null) 1 else 0)
-        if(cs!=null) {
+        dest.writeInt(if (this.cs != null) 1 else 0)
+        if (cs != null) {
             dest.writeString(cs?.name)
         }
-        dest.writeInt(if(this.ht!=null) 1 else 0)
-        if(ht!=null) {
+        dest.writeInt(if (this.ht != null) 1 else 0)
+        if (ht != null) {
             dest.writeString(ht?.name)
         }
-        dest.writeInt(if(this.ds!=null) 1 else 0)
-        if(ds!=null) {
+        dest.writeInt(if (this.ds != null) 1 else 0)
+        if (ds != null) {
             dest.writeString(ds?.name)
         }
-        dest.writeInt(if(this.eac!=null) 1 else 0)
-        if(eac!=null) {
+        dest.writeInt(if (this.eac != null) 1 else 0)
+        if (eac != null) {
             dest.writeString(eac?.name)
         }
-        dest.writeInt(if(this.ca!=null) 1 else 0)
-        if(ca!=null) {
+        dest.writeInt(if (this.ca != null) 1 else 0)
+        if (ca != null) {
             dest.writeString(ca?.name)
         }
 
@@ -506,6 +518,7 @@ class VerificationStatus : Parcelable {
          */
         var storedHash: ByteArray? = null
             private set
+
         /**
          * Gets the computed hash.
          *

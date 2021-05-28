@@ -53,9 +53,7 @@ class NfcFragment : androidx.fragment.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val inflatedView = inflater.inflate(R.layout.fragment_nfc, container, false)
-
-        return inflatedView
+        return inflater.inflate(R.layout.fragment_nfc, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

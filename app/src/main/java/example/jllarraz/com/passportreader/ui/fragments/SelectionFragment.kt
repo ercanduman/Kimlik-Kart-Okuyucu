@@ -71,11 +71,12 @@ class SelectionFragment : androidx.fragment.app.Fragment(), Validator.Validation
                     linearLayoutAutomatic!!.visibility = View.GONE
                 }
                 R.id.radioButtonOcr -> {
-                    linearLayoutManual!!.visibility = View.GONE
-                    linearLayoutAutomatic!!.visibility = View.VISIBLE
-                    if (selectionFragmentListener != null) {
-                        selectionFragmentListener!!.onMrzRequest()
-                    }
+                    Toast.makeText(requireContext(), "Not Implemented yet.", Toast.LENGTH_SHORT).show()
+                    /* linearLayoutManual!!.visibility = View.GONE
+                     linearLayoutAutomatic!!.visibility = View.VISIBLE
+                     if (selectionFragmentListener != null) {
+                         selectionFragmentListener!!.onMrzRequest()
+                     }*/
                 }
             }
         }
@@ -127,7 +128,7 @@ class SelectionFragment : androidx.fragment.app.Fragment(), Validator.Validation
     override fun onAttach(context: Context) {
         super.onAttach(context)
         val activity = activity
-        if (activity is SelectionFragment.SelectionFragmentListener) {
+        if (activity is SelectionFragmentListener) {
             selectionFragmentListener = activity
         }
     }
@@ -202,13 +203,13 @@ class SelectionFragment : androidx.fragment.app.Fragment(), Validator.Validation
     ////////////////////////////////////////////////////////////////////////////////////////
 
 
-    fun requireDownloadCSCA(){
+    fun requireDownloadCSCA() {
         val downloadsFolder = requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!
         val keyStore = KeyStoreUtils().readKeystoreFromFile(downloadsFolder)
-        if(keyStore==null || keyStore.aliases().toList().isNullOrEmpty()){
+        if (keyStore == null || keyStore.aliases().toList().isNullOrEmpty()) {
             //No certificates downloaded
             downloadSpanishMasterList()
-        } else{
+        } else {
             //Certificates in the keystore
             val dialog = AlertDialog.Builder(requireContext())
                     .setTitle(R.string.keystore_not_empty_title)
@@ -236,7 +237,7 @@ class SelectionFragment : androidx.fragment.app.Fragment(), Validator.Validation
         }
     }
 
-    fun cleanCSCAFolder():Single<Boolean>{
+    fun cleanCSCAFolder(): Single<Boolean> {
         return Single.fromCallable {
             try {
                 val downloadsFolder = requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!
@@ -246,13 +247,13 @@ class SelectionFragment : androidx.fragment.app.Fragment(), Validator.Validation
                 }
                 val listFiles1 = downloadsFolder.listFiles()
                 true
-            }catch (e:java.lang.Exception){
+            } catch (e: java.lang.Exception) {
                 false
             }
         }
     }
 
-    fun downloadSpanishMasterList(){
+    fun downloadSpanishMasterList() {
         val masterListService = MasterListService(requireContext(), "https://www.dnielectronico.es/")
         val subscribe = masterListService.getSpanishMasterList()
                 .subscribeOn(Schedulers.io())
@@ -261,14 +262,14 @@ class SelectionFragment : androidx.fragment.app.Fragment(), Validator.Validation
                         { certificates ->
                             saveCertificates(certificates)
                         },
-                        {error->
-                            Toast.makeText(requireContext(), "No certificates has been download "+error, Toast.LENGTH_SHORT).show()
+                        { error ->
+                            Toast.makeText(requireContext(), "No certificates has been download " + error, Toast.LENGTH_SHORT).show()
                         }
                 )
         disposable.add(subscribe)
     }
 
-    fun saveCertificates(certificates:ArrayList<Certificate>){
+    fun saveCertificates(certificates: ArrayList<Certificate>) {
         val subscribe = Single.fromCallable {
             try {
                 val size = certificates.size
@@ -284,19 +285,22 @@ class SelectionFragment : androidx.fragment.app.Fragment(), Validator.Validation
         }.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result ->
-                    if(result>0) {
-                        Toast.makeText(requireContext(), "Certificates Downloaded: "+result, Toast.LENGTH_SHORT).show()
+                    if (result > 0) {
+                        Toast.makeText(requireContext(), "Certificates Downloaded: " + result, Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), "No certificates has been download", Toast.LENGTH_SHORT).show()
                     }
                 }
         disposable.add(subscribe)
     }
+
     companion object {
         val TAG = SelectionFragment::class.java.simpleName
+
         init {
             Security.insertProviderAt(org.spongycastle.jce.provider.BouncyCastleProvider(), 1)
         }
+
         fun newInstance(mrzInfo: MRZInfo, face: Bitmap): PassportDetailsFragment {
             val myFragment = PassportDetailsFragment()
             val args = Bundle()

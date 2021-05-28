@@ -90,10 +90,9 @@ class SelectionActivity : AppCompatActivity(), SelectionFragment.SelectionFragme
     }
 
     override fun onMrzRequest() {
-        val intent = Intent(this, CameraActivity::class.java)
-        startActivityForResult(intent, REQUEST_MRZ)
+        //    val intent = Intent(this, CameraActivity::class.java)
+        //   startActivityForResult(intent, REQUEST_MRZ)
     }
-
 
 
     companion object {
