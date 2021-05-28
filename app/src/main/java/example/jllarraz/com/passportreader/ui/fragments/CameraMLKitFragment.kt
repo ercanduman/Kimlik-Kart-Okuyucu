@@ -134,7 +134,6 @@ class CameraMLKitFragment : CameraFragment() {
                 }
             }
             return callbackFrameProcessor2
-
         }
 
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +168,7 @@ class CameraMLKitFragment : CameraFragment() {
     //       Instantiate the text processor to perform OCR
     //
     ////////////////////////////////////////////////////////////////////////////////////////
-    protected val textProcessor: OcrMrzDetectorProcessor
+    private val textProcessor: OcrMrzDetectorProcessor
         get() = OcrMrzDetectorProcessor(object : OcrMrzDetectorProcessor.MRZCallback {
             override fun onMRZRead(mrzInfo: MRZInfo, timeRequired: Long) {
                 isDecoding = false

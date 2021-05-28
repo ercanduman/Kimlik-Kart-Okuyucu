@@ -15,20 +15,16 @@
  */
 package example.jllarraz.com.passportreader.mlkit
 
+
 import android.graphics.Bitmap
 import android.util.Log
-
 import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer
-
 import net.sf.scuba.data.Gender
-
-
 import org.jmrtd.lds.icao.MRZInfo
-
 import java.io.IOException
 import java.util.regex.Pattern
 
@@ -39,6 +35,7 @@ import java.util.regex.Pattern
  */
 class OcrMrzDetectorProcessor(val callback: MRZCallback) : VisionProcessorBase<FirebaseVisionText>() {
 
+    private val TAG = "OcrMrzDetectorProcessor"
     private val detector: FirebaseVisionTextRecognizer
 
     init {
@@ -65,7 +62,7 @@ class OcrMrzDetectorProcessor(val callback: MRZCallback) : VisionProcessorBase<F
             frameMetadata: FrameMetadata?,
             timeRequired: Long,
             bitmap: Bitmap
-            ) {
+    ) {
 
         var fullRead = ""
         val blocks = results.textBlocks
@@ -82,10 +79,12 @@ class OcrMrzDetectorProcessor(val callback: MRZCallback) : VisionProcessorBase<F
         }
         fullRead = fullRead.toUpperCase()
         Log.d(TAG, "Read: $fullRead")
+        if (fullRead.isEmpty()) {
+            callback.onMRZReadFailure(timeRequired)
+            return
+        }
         val patternLineOldPassportType = Pattern.compile(REGEX_OLD_PASSPORT)
         val matcherLineOldPassportType = patternLineOldPassportType.matcher(fullRead)
-
-
 
         if (matcherLineOldPassportType.find()) {
             //Old passport format
@@ -119,8 +118,41 @@ class OcrMrzDetectorProcessor(val callback: MRZCallback) : VisionProcessorBase<F
                 val mrzInfo = createDummyMrz(documentNumber, dateOfBirthDay, expirationDate)
                 callback.onMRZRead(mrzInfo, timeRequired)
             } else {
-                //No success
-                callback.onMRZReadFailure(timeRequired)
+                // Try ID CARD
+                val patternIDCardTD1Line1 = Pattern.compile(REGEX_ID_CARD_LINE_1)
+                val matcherIDCardTD1Line1 = patternIDCardTD1Line1.matcher(fullRead)
+
+                val patternIDCardTD1Line2 = Pattern.compile(REGEX_ID_CARD_LINE_2)
+                val matcherIDCardTD1Line2 = patternIDCardTD1Line2.matcher(fullRead)
+
+                val patternIDCardTD1Line3 = Pattern.compile(REGEX_ID_CARD_LINE_3)
+                val matcherIDCardTD1Line3 = patternIDCardTD1Line3.matcher(fullRead)
+
+                if (matcherIDCardTD1Line1.find() || matcherIDCardTD1Line2.find() || matcherIDCardTD1Line3.find()) {
+                    var line1 = matcherIDCardTD1Line1.toString()
+                    val line2 = matcherIDCardTD1Line2.toString()
+                    val line3 = matcherIDCardTD1Line3.toString()
+                    Log.d(TAG, "filterScannedText: Read line1: $line1")
+                    Log.d(TAG, "filterScannedText: Read line2: $line2")
+                    Log.d(TAG, "filterScannedText: Read line3: $line3")
+                    if (line1.indexOf(TYPE_ID_CARD) > 0) {
+                        line1 = line1.substring(line1.indexOf(TYPE_ID_CARD))
+                        var documentNumber = line1.substring(5, 14)
+                        documentNumber = documentNumber.replace("O", "0")
+                        val dateOfBirthDay = line2.substring(0, 6)
+                        val expirationDate = line2.substring(8, 14)
+                        Log.d(TAG, "Scanned Text Buffer ID Card ->>>> Doc Number: $documentNumber DateOfBirth: $dateOfBirthDay ExpiryDate: $expirationDate")
+
+                        val mrzInfo = createDummyMrz(documentNumber, dateOfBirthDay, expirationDate)
+                        callback.onMRZRead(mrzInfo, timeRequired)
+                    } else {
+                        //No success
+                        callback.onMRZReadFailure(timeRequired)
+                    }
+                } else {
+                    //No success
+                    callback.onMRZReadFailure(timeRequired)
+                }
             }
         }
 
@@ -143,7 +175,7 @@ class OcrMrzDetectorProcessor(val callback: MRZCallback) : VisionProcessorBase<F
         )
     }
 
-    private fun cleanDate(date:String):String{
+    private fun cleanDate(date: String): String {
         var tempDate = date
         tempDate = tempDate.replace("I".toRegex(), "1")
         tempDate = tempDate.replace("L".toRegex(), "1")
@@ -173,5 +205,9 @@ class OcrMrzDetectorProcessor(val callback: MRZCallback) : VisionProcessorBase<F
         private val REGEX_OLD_PASSPORT_CLEAN = "(?<documentNumber>[A-Z0-9<]{9})(?<checkDigitDocumentNumber>[0-9]{1})(?<nationality>[A-Z<]{3})(?<dateOfBirth>[0-9]{6})(?<checkDigitDateOfBirth>[0-9]{1})(?<sex>[FM<]){1}(?<expirationDate>[0-9]{6})(?<checkDigitExpiration>[0-9]{1})"
         private val REGEX_IP_PASSPORT_LINE_1 = "\\bIP[A-Z<]{3}[A-Z0-9<]{9}[0-9]{1}"
         private val REGEX_IP_PASSPORT_LINE_2 = "[0-9]{6}[0-9]{1}[FM<]{1}[0-9]{6}[0-9]{1}[A-Z<]{3}"
+        private val REGEX_ID_CARD_LINE_1 = "([A|C|I][A-Z0-9<]{1})([A-Z]{3})([A-Z0-9<]{31})";
+        private val REGEX_ID_CARD_LINE_2 = "([0-9]{6})([0-9]{1})([M|F|X|<]{1})([0-9]{6})([0-9]{1})([A-Z]{3})([A-Z0-9<]{11})([0-9]{1})";
+        private val REGEX_ID_CARD_LINE_3 = "([A-Z0-9<]{30})";
+        const val TYPE_ID_CARD = "I<"
     }
 }

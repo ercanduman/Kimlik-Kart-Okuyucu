@@ -83,9 +83,7 @@ abstract class CameraFragment : androidx.fragment.app.Fragment(), ActivityCompat
             fotoapparat = Fotoapparat
                     .with(context?.applicationContext!!)
                     .into(cameraView)
-                    .frameProcessor(
-                            callbackFrameProcessor
-                    )
+                    .frameProcessor(callbackFrameProcessor)
                     .lensPosition { lensPosition }
                     .build()
 
